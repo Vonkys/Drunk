@@ -130,8 +130,8 @@ if (!localStorage.getItem("lihobaronFarmCoins")) {
 
     // --- Stroje ---
     var KUCHYNE_MACHINES = [
-      { key:"stroj_popkorn", name:"Stroj na popcorn 🍿", price:1200 },
-      { key:"fritak", name:"Fritovací hrnec 🍟", price:2500 }
+      { key:"stroj_popkorn", name:"Stroj na popcorn 🍿", price: 10 },
+      { key:"fritak", name:"Fritovací hrnec 🍟", price: 10 }
     ];
 
     function renderMachinesShopKuchyne() {
@@ -212,7 +212,7 @@ if (!localStorage.getItem("lihobaronFarmCoins")) {
       prods.push({
         type: "popkorn",
         started: Date.now(),
-        duration: 310, // vteřin
+        duration: 10, // vteřin
         done: false
       });
       setSklad(sklad);
@@ -267,7 +267,7 @@ if (!localStorage.getItem("lihobaronFarmCoins")) {
       prods.push({
         type: "hranolky",
         started: Date.now(),
-        duration: 550, // vteřin
+        duration: 10, // vteřin
         done: false
       });
       setSklad(sklad);

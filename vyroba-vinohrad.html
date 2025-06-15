@@ -155,12 +155,12 @@ if (!localStorage.getItem("lihobaronFarmCoins")) {
     function vypisStatus(txt,ok){ let e=document.getElementById("vyrobaStatus"); e.innerHTML="<span class='"+(ok?"success":"status")+"'>"+txt+"</span>"; setTimeout(()=>{e.innerHTML='';},2300);}
     // ---- Stroje a časy ----
     const VINO_MACHINES = [
-      { key:"kad_vino",   name:"Lis na víno 🍾",    price: 1500 },
-      { key:"lis_vino",   name:"Kád na víno 🍇",    price: 2100 }
+      { key:"kad_vino",   name:"Lis na víno 🍾",    price: 10 },
+      { key:"lis_vino",   name:"Kád na víno 🍇",    price: 10 }
     ];
     const VINO_TIMES = {
-      "kvasit_vino": 580,
-      "lisovat_vino": 720
+      "kvasit_vino": 10,
+      "lisovat_vino": 10
     };
     // ---- Obchod se stroji ----
     function renderMachinesShop() {

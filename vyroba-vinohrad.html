@@ -164,6 +164,14 @@ if (!localStorage.getItem("lihobaronFarmCoins")) {
   "lisovat_cider": 90,
   "kvasit_cider": 80
 };
+   function formatTime(secs) {
+  if (secs < 60) return secs + "s";
+  let min = Math.floor(secs / 60);
+  let s = secs % 60;
+  return min + "m " + s + "s";
+}
+
+
     // ---- Obchod se stroji ----
     function renderMachinesShop() {
       const machines = getMachines();

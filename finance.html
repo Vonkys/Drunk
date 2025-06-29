@@ -414,13 +414,26 @@ document.getElementById("btn-dobit-pi").onclick = function() {
   }
 };
 
-window.addEventListener("beforeunload", function (e) {
-    // Většina prohlížečů text ignoruje, ale něco se zobrazí vždy
-    var message = "Don’t forget to save your progress on the main page, otherwise your data might be lost!";
-    e.preventDefault(); // Potřebné pro některé prohlížeče
-    e.returnValue = message; // Chrome, Firefox, Edge…
-    return message; // starší prohlížeče
-});
+function allowSafeInternalNavigation() {
+  var links = document.querySelectorAll('a.nav-link, .card');
+  links.forEach(function(link) {
+    link.addEventListener('click', function() {
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+    });
+  });
+}
+
+function beforeUnloadHandler(e) {
+  var message = "Don’t forget to save your progress on the main page, otherwise your data might be lost!";
+  e.preventDefault();
+  e.returnValue = message;
+  return message;
+}
+
+window.addEventListener('beforeunload', beforeUnloadHandler);
+
+allowSafeInternalNavigation(); // spusť po DOMContentLoaded!
+
 
 renderSellList();
 initDailyLogin();

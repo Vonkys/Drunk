@@ -356,29 +356,40 @@
             }
         }
 
-        function loginFirebase() {
-            var email = document.getElementById("loginEmail").value.trim();
-            var password = document.getElementById("loginPassword").value;
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(function(user) {
-                    showGame(true);
-                })
-                .catch(function(error) {
-                    document.getElementById("loginMsg").innerText = "Error: " + error.message;
-                });
-        }
+       function loginFirebase() {
+    var email = document.getElementById("loginEmail").value.trim();
+    var password = document.getElementById("loginPassword").value;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function(user) {
+            if (user.user.emailVerified) {
+                showGame(true);
+            } else {
+                document.getElementById("loginMsg").innerText =
+                    "You need to verify your email before you can play. Check your inbox!";
+                firebase.auth().signOut();
+            }
+        })
+        .catch(function(error) {
+            document.getElementById("loginMsg").innerText = "Error: " + error.message;
+        });
+}
 
-        function registerFirebase() {
-            var email = document.getElementById("loginEmail").value.trim();
-            var password = document.getElementById("loginPassword").value;
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then(function(user) {
-                    showGame(true);
-                })
-                .catch(function(error) {
-                    document.getElementById("loginMsg").innerText = "Registration: " + error.message;
-                });
-        }
+
+       function registerFirebase() {
+    var email = document.getElementById("loginEmail").value.trim();
+    var password = document.getElementById("loginPassword").value;
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function(user) {
+            user.user.sendEmailVerification().then(function() {
+                document.getElementById("loginMsg").innerText = 
+                    "Check your inbox and confirm your email before you log in!";
+            });
+            firebase.auth().signOut(); // Odhlásit, dokud nepotvrdí
+        })
+        .catch(function(error) {
+            document.getElementById("loginMsg").innerText = "Registration: " + error.message;
+        });
+}
 
         function logoutFirebase() {
             firebase.auth().signOut().then(function() {

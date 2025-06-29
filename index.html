@@ -385,7 +385,7 @@
                 data: data,
                 savedAt: new Date().toISOString()
             }).then(function() {
-                document.getElementById("cloudMsg").innerText = "✅ Game saved to cloud!";
+                document.getElementById("cloudMsg").innerText = "✅ Game saved!";
             }).catch(function(error) {
                 document.getElementById("cloudMsg").innerText = "Saving error: " + error.message;
             });
@@ -404,7 +404,7 @@
                     for (var k in data) {
                         localStorage.setItem(k, data[k]);
                     }
-                    document.getElementById("cloudMsg").innerText = "✅ Game loaded from cloud! Reloading...";
+                    document.getElementById("cloudMsg").innerText = "✅ Game loaded!";
                     setTimeout(function() { location.reload(); }, 1200);
                 } else {
                     document.getElementById("cloudMsg").innerText = "No save found in the cloud.";

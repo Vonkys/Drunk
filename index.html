@@ -108,16 +108,17 @@
     transform: translateY(-3px) scale(1.05);
 }
 
-@media (max-width:700px) {
+@media (max-width: 700px) {
     .save-cloud-row {
-        flex-direction: column;
-        gap: 10px;
+        margin-left: 60px; /* posun za otazník, klidně i 58-70 podle oka */
+        width: auto;
+        max-width: 170px;
     }
     .save-cloud-row button {
-        width: 97%;
-        font-size: 1.08em;
-        min-width: unset;
-        margin: 0 auto;
+        min-width: 95px;
+        max-width: 140px;
+        font-size: 1em;
+        padding: 8px 0;
     }
 }
 

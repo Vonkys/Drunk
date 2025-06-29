@@ -234,11 +234,13 @@
 </head>
 <body>
     <!-- HORNÍ BAR -->
-    <div class="top-bar">
-        <a href="napoveda.html" title="Help" class="okurka-btn">❓</a>
-        <button class="mini-btn" onclick="saveLocalStorageToCloud()">SAVE</button>
-        <button class="mini-btn" onclick="loadLocalStorageFromCloud()">LOAD</button>
-    </div>
+   <div class="top-bar">
+    <a href="napoveda.html" title="Help" class="okurka-btn">❓</a>
+    <button class="mini-btn" onclick="saveLocalStorageToCloud()">SAVE</button>
+    <button class="mini-btn" onclick="loadLocalStorageFromCloud()">LOAD</button>
+</div>
+<div id="cloudMsg" style="text-align:center; margin-top:8px; font-weight:bold;"></div>
+
     <!-- VPRAVO RESET & LOGOUT -->
     <div class="corner-box">
         <div class="reset-link" onclick="resetGame()">🔄 Reset game</div>

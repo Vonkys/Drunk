@@ -432,11 +432,13 @@ function beforeUnloadHandler(e) {
 
 window.addEventListener('beforeunload', beforeUnloadHandler);
 
-allowSafeInternalNavigation(); // spusť po DOMContentLoaded!
 
 
 renderSellList();
 initDailyLogin();
+document.addEventListener('DOMContentLoaded', function() {
+  allowSafeInternalNavigation();
+});
 
 </script>
 </body>

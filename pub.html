@@ -443,14 +443,10 @@ if (!firebase.apps.length) {
 const firestore = firebase.firestore();
 // Po inicializaci Firebase
 firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    showMsg("Přihlášen jako: " + (user.email || user.uid));
-    // (Můžeš tu povolit tlačítka/save nebo vykreslit víc informací)
-  } else {
-    showMsg("Nejsi přihlášen! Uložení bude fungovat až po přihlášení na hlavní stránce.");
-    // (Když chceš, můžeš schovat SAVE tlačítko: document.querySelector('.back-disketa').style.display='none';)
-  }
+  // Jen si tady schovej usera do proměnný:
+  window.firebaseUserReady = !!user;
 });
+
 function saveLocalStorageToCloud() {
     var user = firebase.auth().currentUser;
     if (!user) {

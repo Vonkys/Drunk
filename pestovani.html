@@ -886,7 +886,7 @@ function activateFarmBoost() {
   const h = Math.floor(diff / (1000 * 60 * 60));
   const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const s = Math.floor((diff % (1000 * 60)) / 1000);
-  alert(`⚠️ Boost už běží! Zbývá ${h}h ${m}m ${s}s.`);
+  alert(`⚠️ Boost in progress! Left ${h}h ${m}m ${s}s.`);
   return;
 }
 

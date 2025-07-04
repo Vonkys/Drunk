@@ -328,7 +328,7 @@ function renderBakerySection() {
     let sec = Math.floor((left%60000)/1000);
     html += "<div class='phase-card'>";
     html += "<div class='phase-title'><span class='phase-icon'>🚰</span> Water tap</div>";
-    html += "<div class='phase-info'>Produces 1 water every 30 minutes</div>";
+    html += "<div class='phase-info'>Produces <b>1</b> water every <b>30</b> minutes</div>";
     html += "<div class='progress-container' style='width:90%;margin:8px auto;height:18px;background:#eee;border-radius:8px;box-shadow:0 1px 4px #20827822;overflow:hidden;'><div class='progress-bar' style='height:100%;background:#37af7b;width:" + percent + "%;transition:width 0.2s;'></div></div>";
     html += "<div class='progress-text'>Time left: " + min + "m " + (sec<10?"0":"") + sec + "s</div>";
     html += "<div style='margin-top:10px;'><b>Water:</b> " + (sklad["water"]||0) + "</div>";

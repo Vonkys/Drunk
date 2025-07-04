@@ -138,13 +138,13 @@ function stavPrachy() { document.getElementById("stavPrachy").innerText = getMon
 function vypisStatus(txt,ok){ let e=document.getElementById("vyrobaStatus"); e.innerHTML="<span class='"+(ok?"success":"status")+"'>"+txt+"</span>"; setTimeout(()=>{e.innerHTML='';},2300);}
 
 const BAKERY_MACHINES = [
-  { key: "water_tap", name: "Water Tap 🚰", price: 25 },
-  { key: "oven", name: "Oven 🍞", price: 71 }
+  { key: "water_tap", name: "Water Tap 🚰", price: 2500 },
+  { key: "oven", name: "Oven 🍞", price: 7100 }
 ];
 
-const WATER_INTERVAL = 180000; // 3 min test! (Změň na 1800000 pro 30 min)
-const DOUGH_INTERVAL = 60000;  // 1 min test! (Změň na 600000 pro 10 min)
-const BREAD_INTERVAL = 120000; // 2 min test! (Změň na 1200000 pro 20 min)
+const WATER_INTERVAL = 1800000; // 3 min test! (Změň na 1800000 pro 30 min)
+const DOUGH_INTERVAL = 600000;  // 1 min test! (Změň na 600000 pro 10 min)
+const BREAD_INTERVAL = 1200000; // 2 min test! (Změň na 1200000 pro 20 min)
 
 // --- SHOP ---
 function renderBakeryMachinesShop() {

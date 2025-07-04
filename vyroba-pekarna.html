@@ -138,11 +138,11 @@ function stavPrachy() { document.getElementById("stavPrachy").innerText = getMon
 function vypisStatus(txt,ok){ let e=document.getElementById("vyrobaStatus"); e.innerHTML="<span class='"+(ok?"success":"status")+"'>"+txt+"</span>"; setTimeout(()=>{e.innerHTML='';},2300);}
 
 const BAKERY_MACHINES = [
-  { key: "water_tap", name: "Water Tap 🚰", price: 1 },
-  { key: "oven", name: "Oven 🍞", price: 3 }
+  { key: "water_tap", name: "Water Tap 🚰", price: 1000 },
+  { key: "oven", name: "Oven 🍞", price: 3000 }
 ];
 
-const WATER_INTERVAL = 18; // 30 min
+const WATER_INTERVAL = 1800000; // 30 min
 const DOUGH_INTERVAL = 600000; // 10 min
 const BREAD_INTERVAL = 1200000; // 20 minut
 

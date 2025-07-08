@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drunk - Punk</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <meta name="theme-color" content="#208278">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #fffbe6 0%, #e1d9c5 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            width: 100vw;
+        }
+        /* ---- HORNÍ BAR ---- */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0 0 22px;
+        }
+        .okurka-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px; height: 36px;
+            background: #fffbe6;
+            border: 2px solid #d4a939;
+            border-radius: 8px;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-decoration: none;
+            color: #b17f05;
+            box-shadow: 0 2px 7px #c0ab6e55;
+            cursor: pointer;
+        }
+        .okurka-btn:hover { background: #ffedbb; border-color: #f1b000; }
+        .mini-btn {
+            font-size: 1em;
+            padding: 7px 26px;
+            border-radius: 7px;
+            border: 2px solid #333;
+            background: #fff;
+            color: #222;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 84px;
+            margin: 0;
+            box-shadow: 0 1px 6px #0001;
+            transition: background 0.18s;
+        }
+        .mini-btn:hover { background: #f6f6f6; }
+
+        /* ---- PRAVÝ HORNÍ ROH ---- */
+        .corner-box {
+            position: absolute;
+            top: 16px;
+            right: 26px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 500;
+        }
+        .reset-link {
+            color: #1b6782;
+            font-size: 1.02em;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 3px;
+            margin-right: 7px;
+            user-select: none;
+        }
+      .title {
+    font-size: 2.7em;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #593e2c;
+    text-shadow: 0 2px 12px #f3e0b966;
+    margin-bottom: 8px;
+    margin-top: 60px;
+    text-align: center;
+}
+.subtitle {
+    font-size: 1.22em;
+    color: #917a53;
+    font-weight: 600;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+@media (max-width: 700px) {
+    .title { font-size: 2.3em; margin-top: 30px; }
+    .subtitle { font-size: 1em; }
+}
+
+        .logout-btn {
+            font-size: 1em;
+            padding: 8px 34px;
+            background: #dec9b0;
+            color: #593e2c;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px #0001;
+            cursor: pointer;
+            margin-bottom: 7px;
+            margin-top: 7px;
+            min-width: 120px;
+        }
+        .logout-btn:hover { background: #eedecb; }
+
+        /* ---- LOGIN ---- */
+     .login-box {
+  margin: 80px auto 0 auto;
+  max-width: 400px;
+  background: rgba(255,255,255,0.11);
+  border-radius: 17px;
+  box-shadow: 0 6px 38px #0001, 0 1px 8px #0001;
+  padding: 32px 24px 30px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 21px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 15px 15px 15px 18px;
+  border-radius: 10px;
+  border: 1.8px solid #ddd;
+  font-size: 1.16em;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  outline: none;
+  background: #fff;
+}
+
+.login-box input:focus {
+  border-color: #208278;
+  background: #f6fffd;
+}
+#logged-in-user {
+  margin-left: 30px;
+  margin-top: 4px;
+  font-size: 1em;
+  color: #1760a3;
+  font-weight: bold;
+  max-width: 300px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 700px) {
+  #logged-in-user {
+    margin-left: 10px !important;  /* nebo 5px, jak ti sedne */
+  }
+}
+
+
+.login-btns {
+  display: flex;
+  width: 100%;
+  gap: 22px;
+  margin-top: 4px;
+}
+
+.login-btns button {
+  flex: 1 1 0;
+  padding: 13px 0;
+  background: #22877b;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 1.16em;
+  letter-spacing: 1px;
+  box-shadow: 0 1px 9px #0001;
+  cursor: pointer;
+  transition: background 0.16s, transform 0.11s;
+}
+.login-btns button:hover {
+  background: #155c53;
+  transform: translateY(-2px) scale(1.03);
+}
+#loginMsg {
+  color: #b70000;
+  margin-top: 10px;
+  min-height: 20px;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .login-box {
+    max-width: 95vw;
+    padding: 21px 4vw 21px 4vw;
+    gap: 13px;
+  }
+  .login-btns {
+    gap: 10px;
+  }
+  .login-btns button {
+    font-size: 1em;
+    padding: 10px 0;
+  }
+}
+
+        #cloudMsg { margin-top: 10px; color: #13536b; font-weight: bold; }
+
+        /* ---- KARTY ---- */
+        .cards { display: flex; justify-content: center; gap: 35px; flex-wrap: wrap; }
+        .card { width: 220px; border-radius: 18px; box-shadow: 0 8px 28px rgba(0,0,0,0.09), 0 1.5px 5px rgba(0,0,0,0.07); padding: 32px 16px 24px 16px; color: #fff; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; font-size: 1.18em; margin-bottom: 40px; }
+        .card:hover { transform: translateY(-8px) scale(1.06); box-shadow: 0 18px 36px rgba(0,0,0,0.18), 0 2.5px 10px rgba(0,0,0,0.11); }
+        .pestovani {background: linear-gradient(135deg, #7bb661 0%, #a0e370 100%);}
+        .vyroba {background: linear-gradient(135deg, #d28f49 0%, #f4a261 100%);}
+        .jzd {background: linear-gradient(135deg, #a1c95a 0%, #e8e658 100%);}
+        .finance {background: linear-gradient(135deg, #27787a 0%, #3ec6b5 100%);}
+        .sklad {background: linear-gradient(135deg, #6e44ff 0%, #b892ff 100%);}
+        .card-emoji {font-size: 3em; margin-bottom: 14px;}
+        .card-title {font-size: 1.25em; font-weight: bold; margin-bottom: 6px;}
+        .card-desc {font-size: 1em; opacity: 0.9;}
+        .card.hospoda {background: #195529 !important; border: 2px solid #e1ffab;}
+        .card.hotel {background: #203669 !important; border: 2px solid #bee7ff;}
+        .card.market {background: #69204c !important; border: 2px solid #bee7ff;}
+
+        /* ---- MOBIL ---- */
+        @media (max-width: 700px) {
+  .top-bar {
+    flex-direction: row;   /* <- tohle oprav! */
+    align-items: center;   /* zarovná vertikálně na střed */
+    gap: 7px;
+    margin: 10px 0 0 7px;
+  }
+  .mini-btn {
+    width: 90px;
+    min-width: 75px;
+    padding: 9px 0;
+    font-size: 1em;
+  }
+}
+            .corner-box {
+                top: 8px;
+                right: 7px;
+                align-items: flex-end;
+            }
+            .reset-link {font-size: 1em; margin-bottom: 3px;}
+            .logout-btn {
+                min-width: 104px;
+                padding: 8px 10px;
+                font-size: 1em;
+            }
+            #loginBox { margin-top: 22px; }
+            .cards { gap: 16px; margin-top: 22px;}
+            .card {width: 93vw; min-width: 0; max-width: 410px; margin-bottom: 24px;}
+        
+    </style>
+</head>
+<body>
+    <!-- HORNÍ BAR -->
+    <div id="logged-in-user"></div>
+    <div class="top-bar">
+    <a href="napoveda.html" title="Help" class="okurka-btn">❓</a>
+    <button class="mini-btn" onclick="saveLocalStorageToCloud()">SAVE</button>
+    <button class="mini-btn" onclick="loadLocalStorageFromCloud()">LOAD</button>
+</div>
+<div id="cloudMsg" style="text-align:center; margin-top:8px; font-weight:bold;"></div>
+
+    <!-- VPRAVO RESET & LOGOUT -->
+    <div class="corner-box">
+        <div class="reset-link" onclick="resetGame()">🔄 RESET</div>
+        <button class="logout-btn" id="logoutBtn" onclick="logoutFirebase()" style="display:none;">LOGOUT</button>
+        <div style="margin-top: 4px; font-size: 0.96em; color: #444; font-weight: bold;">
+            🕵 We track visits
+        </div>
+    </div>
+
+   <!-- LOGIN BOX -->
+<div class="login-box" id="loginBox">
+<input type="email" id="loginEmail" placeholder="Email">
+  <input type="password" id="loginPassword" placeholder="Password">
+  <div class="login-btns">
+    <button onclick="loginFirebase()">Login</button>
+    <button onclick="registerFirebase()">Register</button>
+  </div>
+  <div id="loginMsg"></div>
+</div>
+<div id="save-warning-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.33); z-index:9999;">
+  <div style="background:#fffbe6; color:#208278; max-width:340px; margin: 110px auto 0 auto; padding: 28px 26px 22px 26px; border-radius:16px; box-shadow:0 7px 28px #0004; text-align:center; font-size:1.13em; font-weight:bold;">
+    ⚠️ <b>Don't forget to save your progress!</b>
+    <div style="font-size:0.98em; color:#725a28; margin:12px 0 7px 0; font-weight:normal;">
+      Before leaving, click <span style='color:#22877b; font-weight:bold;'>Save game</span> to keep your progress safe.<br>If you don't, your data can be lost.
+      <br><br>💡 Wanna learn how to play? Click the <b>question mark ❓</b> in the top left corner of this page and become a farming legend.
+    </div>
+    <button onclick="document.getElementById('save-warning-modal').style.display='none';" style="margin-top:10px; padding:8px 28px; border-radius:8px; background:#208278; color:white; border:none; font-weight:bold; font-size:1em; cursor:pointer;">OK, got it!</button>
+  </div>
+</div>
+
+
+
+  
+<!-- OBSAH HRY -->
+    <div id="gameContent" style="display:none;">
+        <b><div class="title" style="margin-top: 80px;">🍻 Drunk - Punk</div></b>
+        <div class="subtitle">A farming, brewing & booze-battle sim… Are you the king of liquor and beer?</div>
+        <div class="cards">
+            <div class="card pestovani" onclick="window.location.href='pestovani.html'">
+                <div class="card-emoji">🌾🍇</div>
+                <div class="card-title">Grow sh*t</div>
+                <div class="card-desc">Hopfields, wheat & potato fields, sugarcane, orchards (plums, pears…)</div>
+            </div>
+            <div class="card vyroba" onclick="window.location.href='vyroba.html'">
+                <div class="card-emoji">⚗️🍻</div>
+                <div class="card-title">Brewing</div>
+                <div class="card-desc">Beer brewing, fermentation, distilling, tanks and moonshine rigs</div>
+            </div>
+            <div class="card jzd" onclick="window.location.href='jzd.html'">
+                <div class="card-emoji">🐮</div>
+                <div class="card-title">Coop</div>
+                <div class="card-desc">Animals, manure, milk, eggs, meat… Buy & feed ‘em before your cow drops dead!</div>
+            </div>
+            <div class="card finance" onclick="window.location.href='finance.html'">
+                <div class="card-emoji">💰📈</div>
+                <div class="card-title">Wallet</div>
+                <div class="card-desc">Profit, investments, costs, market trends – run your biz right!</div>
+            </div>
+            <div class="card sklad" onclick="window.location.href='sklad.html'">
+                <div class="card-emoji">📦🧺</div>
+                <div class="card-title">Stash</div>
+                <div class="card-desc">Seeds, harvested stuff, finished booze – all in one spot.</div>
+            </div>
+            <div class="card hospoda" onclick="window.location.href='pub.html'">
+                <div class="card-emoji">🍺</div>
+                <div class="card-title">Bar</div>
+                <div class="card-desc">Guest orders, Friday specials – deliver & cash in!</div>
+            </div>
+            <div class="card hotel" onclick="window.location.href='hotel.html'">
+                <div class="card-emoji">🏨</div>
+                <div class="card-title">Motel</div>
+                <div class="card-desc">Weddings, corporate parties, mega orders – for hardcore distillers only!</div>
+            </div>
+            <div class="card market" onclick="window.location.href='market.html'">
+                <div class="card-emoji">🏪</div>
+                <div class="card-title">Bazaar</div>
+                <div class="card-desc">Customer orders, booze sales – supply & make money!</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function resetGame() {
+            if (confirm("Are you sure you want to reset the game? All data will be wiped.")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+        // ---- FIREBASE ----
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfPJJL8cbfxmpWpHG5_icQOZjzGWSpeZI",
+            authDomain: "drunk-punk.firebaseapp.com",
+            projectId: "drunk-punk",
+            storageBucket: "drunk-punk.firebasestorage.app",
+            messagingSenderId: "749798531604",
+            appId: "1:749798531604:web:9e702aee7c9a2599627d01",
+            measurementId: "G-JSFRP622EL"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const firestore = firebase.firestore();
+
+       function showGame(logged) {
+  document.getElementById("loginBox").style.display = logged ? "none" : "block";
+  document.getElementById("gameContent").style.display = logged ? "block" : "none";
+  document.getElementById("logoutBtn").style.display = logged ? "block" : "none";
+  document.getElementById("cloudMsg").innerText = "";
+  if (!logged) {
+    document.getElementById("loginMsg").innerText = "";
+    document.getElementById("loginEmail").value = "";
+    document.getElementById("loginPassword").value = "";
+    sessionStorage.removeItem("alreadyWarnedSave"); // pro jistotu reset warningu
+  } else {
+    showSaveWarningModalIfNeeded();
+  }
+}
+
+        function showSaveWarningModalIfNeeded() {
+  if (!sessionStorage.getItem("alreadyWarnedSave")) {
+    document.getElementById("save-warning-modal").style.display = "block";
+    sessionStorage.setItem("alreadyWarnedSave", "1");
+  }
+}
+
+       
+        function loginFirebase() {
+    var email = document.getElementById("loginEmail").value.trim();
+    var password = document.getElementById("loginPassword").value;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function(user) {
+            if (user.user.emailVerified) {
+                showGame(true);
+            } else {
+                document.getElementById("loginMsg").innerText =
+                    "You need to verify your email before you can play. Check your inbox!";
+                firebase.auth().signOut();
+            }
+        })
+        .catch(function(error) {
+            document.getElementById("loginMsg").innerText = "Error: " + error.message;
+        });
+}
+
+
+       function registerFirebase() {
+    var email = document.getElementById("loginEmail").value.trim();
+    var password = document.getElementById("loginPassword").value;
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function(user) {
+            user.user.sendEmailVerification().then(function() {
+                document.getElementById("loginMsg").innerText = 
+                    "Check your inbox and confirm your email before you log in!";
+            });
+            firebase.auth().signOut(); // Odhlásit, dokud nepotvrdí
+        })
+        .catch(function(error) {
+            document.getElementById("loginMsg").innerText = "Registration: " + error.message;
+        });
+}
+
+        function logoutFirebase() {
+            firebase.auth().signOut().then(function() {
+                showGame(false);
+            });
+        }
+
+        // Save localStorage to Firestore
+        function saveLocalStorageToCloud() {
+    var user = firebase.auth().currentUser;
+    if (!user) {
+        showMsg("You must be logged in!");
+        return;
+    }
+    var data = {};
+    for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        data[key] = localStorage.getItem(key);
+    }
+
+    // Ujisti se, že xpHistory je pole, ne string
+    var xpHistory = [];
+    if (data.xpHistory) {
+        try {
+            xpHistory = JSON.parse(data.xpHistory);
+            if (!Array.isArray(xpHistory)) xpHistory = [];
+        } catch (e) {
+            xpHistory = [];
+        }
+    }
+    var currentXP = parseInt(data.lihobaronFarmXP || "0", 10);
+    // Přidat nový záznam pouze pokud se XP změnilo
+    var posledni = xpHistory.length ? xpHistory[xpHistory.length-1] : null;
+    if (!posledni || posledni.xp !== currentXP) {
+        xpHistory.push({
+            xp: currentXP,
+            timestamp: Date.now()
+        });
+    }
+    // Ulož zpátky do data
+    data.xpHistory = xpHistory;
+
+    firestore.collection("saves").doc(user.uid).set({
+        data: data,
+        savedAt: new Date().toISOString(),
+        email: user.email || ""
+    }).then(function() {
+        showMsg("✅ Game saved!");
+    }).catch(function(error) {
+        showMsg("Saving error: " + error.message);
+    });
+}
+            
+        function updateLoggedInUser() {
+    var el = document.getElementById("logged-in-user");
+    var user = firebase.auth().currentUser;
+    if (user && user.email) {
+        el.innerText = "" + user.email;
+    } else {
+        el.innerText = "";
+    }
+}
+
+firebase.auth().onAuthStateChanged(function(user) {
+    showGame(!!user);
+    updateLoggedInUser();
+});
+
+       
+        // Load localStorage from Firestore
+        function loadLocalStorageFromCloud() {
+    var user = firebase.auth().currentUser;
+    if (!user) {
+        document.getElementById("cloudMsg").innerText = "You must be logged in!";
+        return;
+    }
+    firestore.collection("saves").doc(user.uid).get().then(function(doc) {
+        if (doc.exists && doc.data().data) {
+            var data = doc.data().data;
+            for (var k in data) {
+                // OPRAVA: xpHistory vždy ulož jako JSON string!
+                if (k === "xpHistory" && Array.isArray(data[k])) {
+                    localStorage.setItem(k, JSON.stringify(data[k]));
+                } else {
+                    localStorage.setItem(k, data[k]);
+                }
+            }
+            document.getElementById("cloudMsg").innerText = "✅ Game loaded!";
+            setTimeout(function() { location.reload(); }, 1200);
+        } else {
+            document.getElementById("cloudMsg").innerText = "No save found in the cloud.";
+        }
+    }).catch(function(error) {
+        document.getElementById("cloudMsg").innerText = "Loading error: " + error.message;
+    });
+}
+
+
+        // Listen for auth state
+        firebase.auth().onAuthStateChanged(function(user) {
+            showGame(!!user);
+        });
+    </script>
+</body>
+</html>

@@ -502,30 +502,50 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
        
-        // Load localStorage from Firestore
-        function loadLocalStorageFromCloud() {
+       function loadLocalStorageFromCloud() {
     var user = firebase.auth().currentUser;
     if (!user) {
         document.getElementById("cloudMsg").innerText = "You must be logged in!";
         return;
     }
-    firestore.collection("saves").doc(user.uid).get().then(function(doc) {
-        if (doc.exists && doc.data().data) {
-            var data = doc.data().data;
+
+    firestore.collection("saves").doc(user.uid).get().then(function (doc) {
+        if (doc.exists && doc.data()) {
+            var data = doc.data();
+
+            let latestSave = null;
+            let latestTimestamp = 0;
+
             for (var k in data) {
-                // OPRAVA: xpHistory vždy ulož jako JSON string!
-                if (k === "xpHistory" && Array.isArray(data[k])) {
-                    localStorage.setItem(k, JSON.stringify(data[k]));
-                } else {
-                    localStorage.setItem(k, data[k]);
+                // Zjistíme, jestli je to objekt se save slotem
+                if (data[k] && typeof data[k] === "object" && data[k].timestamp) {
+                    if (data[k].timestamp > latestTimestamp) {
+                        latestTimestamp = data[k].timestamp;
+                        latestSave = data[k];
+                    }
                 }
             }
-            document.getElementById("cloudMsg").innerText = "✅ Game loaded!";
-            setTimeout(function() { location.reload(); }, 1200);
+
+            if (latestSave) {
+                // Např. xpHistory jako JSON string, ostatní rovnou
+                for (var field in latestSave) {
+                    if (field === "xpHistory" && Array.isArray(latestSave[field])) {
+                        localStorage.setItem(field, JSON.stringify(latestSave[field]));
+                    } else {
+                        localStorage.setItem(field, latestSave[field]);
+                    }
+                }
+
+                document.getElementById("cloudMsg").innerText = "✅ Game loaded!";
+                setTimeout(function () { location.reload(); }, 1200);
+            } else {
+                document.getElementById("cloudMsg").innerText = "No valid save slot found.";
+            }
+
         } else {
             document.getElementById("cloudMsg").innerText = "No save found in the cloud.";
         }
-    }).catch(function(error) {
+    }).catch(function (error) {
         document.getElementById("cloudMsg").innerText = "Loading error: " + error.message;
     });
 }
